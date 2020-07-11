@@ -1,3 +1,4 @@
+using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using CatalogES.Mappings;
+using CatalogES.Service;
 
 namespace CatalogES
 {
@@ -35,6 +38,12 @@ namespace CatalogES
                 sp.GetRequiredService<IOptions<DBSettings>>().Value);
 
             services.AddControllers();
+
+            var config = new MapperConfiguration(c=> {
+                c.AddProfile(new CatalogMapProfile());
+            });
+
+            services.AddTransient<ICatalogService, CatalogService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
